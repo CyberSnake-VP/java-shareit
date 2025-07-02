@@ -38,8 +38,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         if (items.containsKey(item.getOwner())) {
             items.get(item.getOwner()).add(item);
         } else {
-            items.put(item.getOwner(), new ArrayList<>() {
-                {
+            items.put(item.getOwner(), new ArrayList<>() {{
                     add(item);
                 }
             });
