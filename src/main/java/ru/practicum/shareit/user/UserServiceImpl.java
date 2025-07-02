@@ -47,20 +47,16 @@ public class UserServiceImpl implements UserService {
         if(userToUpdate == null) {
             throw new ValidationException("Пользователя c id "+ userId + "не существует.");
         }
-        if(user.getName() == null && user.getEmail() == null) {
-            throw new ValidationException("Все поля для изменения пусты. Необходимо задать значения хотя бы одного поля.");
-        }
-        if(user.getEmail() != null && !isEmailExists(user)) {
-
-        }
         if(user.getName() != null) {
-
+            userToUpdate.setName(user.getName());
+        }
+        if(user.getEmail() != null) {
+            if(isEmailExists(user)) {
+                throw new ValidationException("Email уже существует.");
+            }
+            userToUpdate.setEmail(user.getEmail());
         }
 
-
-
-        userToUpdate.setName(user.getName());
-        userToUpdate.setEmail(user.getEmail());
         return userRepository.save(userToUpdate);
     }
 
