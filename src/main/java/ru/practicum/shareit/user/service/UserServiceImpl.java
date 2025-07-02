@@ -1,9 +1,11 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
 
