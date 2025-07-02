@@ -54,16 +54,34 @@ public class ItemServiceImpl implements ItemService {
         Item model = itemRepository.findById(userId, itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с id " + userId + "не найдена."));
 
-        if(item.getName() != null){
+        if (item.getName() != null) {
             model.setName(item.getName());
         }
-        if(item.getDescription() != null){
+        if (item.getDescription() != null) {
             model.setDescription(item.getDescription());
         }
-        if(item.getAvailable() != null){
+        if (item.getAvailable() != null) {
             model.setAvailable(item.getAvailable());
         }
 
         return ItemMapper.toItemDto(itemRepository.save(model));
+    }
+
+    @Override
+    public List<ItemDto> searchItem(Long userId, String textSearch) {
+        log.info("Search item from user {}", userId);
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не существует."));
+        List<Item> items = itemRepository.findAll(userId);
+        if (items.isEmpty() || textSearch.isEmpty()) {
+            return List.of();
+        }
+
+        return items.stream().
+                filter(item -> (item.getName().toLowerCase().contains(textSearch.toLowerCase()) ||
+                        item.getDescription().toLowerCase().contains(textSearch.toLowerCase())) &&
+                        (item.getAvailable() != false))
+                .map(ItemMapper::toItemDto)
+                .toList();
     }
 }

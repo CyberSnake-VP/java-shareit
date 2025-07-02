@@ -6,9 +6,12 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
@@ -17,25 +20,29 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         log.info("Get all users");
-        return userRepository.findAll();
+        return userRepository.findAll().stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public User getUserById(Long userId) {
+    public UserDto getUserById(Long userId) {
         log.info("Get user by id: {}", userId);
-        return userRepository.findById(userId).
-                orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
+        return userRepository.findById(userId)
+                .map(UserMapper::toUserDto)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
     }
 
     @Override
-    public User saveUser(User user) {
+    public UserDto saveUser(UserDto user) {
         log.info("Save user: {}", user);
         if (isEmailExists(user)) {
             throw new ValidationException("Данный email уже используется.");
         }
-        return userRepository.save(user);
+        User userToSave = UserMapper.toUser(user);
+        return UserMapper.toUserDto(userRepository.save(userToSave));
     }
 
     @Override
@@ -45,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long userId, User user) {
+    public UserDto updateUser(Long userId, UserDto user) {
         log.info("Update user: {}", user);
         User userToUpdate = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
@@ -62,10 +69,10 @@ public class UserServiceImpl implements UserService {
             userToUpdate.setEmail(user.getEmail());
         }
 
-        return userRepository.save(userToUpdate);
+        return UserMapper.toUserDto(userRepository.save(userToUpdate));
     }
 
-    public boolean isEmailExists(User user) {
+    public boolean isEmailExists(UserDto user) {
         return userRepository.findAll()
                 .stream()
                 .anyMatch(u -> u.getEmail().equals(user.getEmail()));

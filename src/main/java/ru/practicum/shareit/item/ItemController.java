@@ -42,4 +42,10 @@ public class ItemController {
         return itemService.updateItem(itemId, item, userId);
     }
 
+    @GetMapping("/search")
+    public List<ItemDto> search(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                @RequestParam("text") String text) {
+        return itemService.searchItem(userId, text);
+    }
+
 }
