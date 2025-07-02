@@ -78,9 +78,10 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return items.stream().
-                filter(item -> (item.getName().toLowerCase().contains(textSearch.toLowerCase()) ||
-                        item.getDescription().toLowerCase().contains(textSearch.toLowerCase())) &&
-                        (item.getAvailable() != false))
+                filter(item ->
+                        (item.getName().toLowerCase().contains(textSearch.toLowerCase()) ||
+                                item.getDescription().toLowerCase().contains(textSearch.toLowerCase())) &&
+                                (item.getAvailable() != false))
                 .map(ItemMapper::toItemDto)
                 .toList();
     }

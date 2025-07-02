@@ -36,6 +36,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
+    @ResponseStatus(HttpStatus.OK)
     public ItemDto update(@RequestHeader("X-Sharer-User-Id") Long userId,
                           @PathVariable("itemId") Long itemId,
                           @RequestBody ItemDto item) {
@@ -43,6 +44,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> search(@RequestHeader("X-Sharer-User-Id") Long userId,
                                 @RequestParam("text") String text) {
         return itemService.searchItem(userId, text);
