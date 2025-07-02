@@ -9,7 +9,8 @@ import java.util.*;
 @Repository
 @Slf4j
 public class UserRepositoryImpl implements UserRepository {
-
+    // Хранение в памяти по ТЗ 14 спринта.
+    // Ключ:id Значение:пользователь
     private final Map<Long, User> users = new HashMap<>();
     private long idGenerator = 0;
 

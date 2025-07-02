@@ -11,6 +11,7 @@ import java.util.*;
 public class ItemRepositoryImpl implements ItemRepository {
 
     // список вещей конкретного пользователя.
+    // ключ:id пользователя значение: список его вещей.
     private final Map<Long, List<Item>> items = new HashMap<>();
     private long generateId = 0;
 
