@@ -9,6 +9,7 @@ import ru.practicum.shareit.item.dto.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.repository.UserRepository;
+import java.util.List;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,8 +40,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto addNewItem(Long userId, ItemDto item) {
         log.info("Add new item from user {}", userId);
-        userRepository.findById(userId).
-                orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
         Item model = ItemMapper.toItem(item);
         model.setOwner(userId);
         return ItemMapper.toItemDto(itemRepository.save(model));
@@ -77,8 +78,8 @@ public class ItemServiceImpl implements ItemService {
             return List.of();
         }
 
-        return items.stream().
-                filter(item ->
+        return items.stream()
+                .filter(item ->
                         (item.getName().toLowerCase().contains(textSearch.toLowerCase()) ||
                                 item.getDescription().toLowerCase().contains(textSearch.toLowerCase())) &&
                                 (item.getAvailable() != false))
