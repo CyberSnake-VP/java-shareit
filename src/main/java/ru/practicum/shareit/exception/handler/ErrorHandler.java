@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 
 import java.util.Objects;
@@ -33,6 +34,13 @@ public class ErrorHandler {
     public ErrorResponse handleArgumentNotValid(final MethodArgumentNotValidException e) {
         log.warn(Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
         return ErrorResponse.builder().error(e.getFieldError().getDefaultMessage()).build();
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler
+    public ErrorResponse handleNotFound(final NotFoundException e) {
+        log.warn(e.getMessage());
+        return ErrorResponse.builder().error(e.getMessage()).build();
     }
 
 }

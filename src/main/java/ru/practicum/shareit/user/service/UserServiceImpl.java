@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -22,15 +23,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long id) {
-        log.info("Get user by id: {}", id);
-        return userRepository.findById(id);
+    public User getUserById(Long userId) {
+        log.info("Get user by id: {}", userId);
+        return userRepository.findById(userId).
+                orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
     }
 
     @Override
     public User saveUser(User user) {
         log.info("Save user: {}", user);
-        if(isEmailExists(user)) {
+        if (isEmailExists(user)) {
             throw new ValidationException("Данный email уже используется.");
         }
         return userRepository.save(user);
@@ -45,15 +47,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(Long userId, User user) {
         log.info("Update user: {}", user);
-        User userToUpdate = userRepository.findById(userId);
-        if(userToUpdate == null) {
-            throw new ValidationException("Пользователя c id "+ userId + "не существует.");
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
+        if (userToUpdate == null) {
+            throw new ValidationException("Пользователя c id " + userId + "не существует.");
         }
-        if(user.getName() != null) {
+        if (user.getName() != null) {
             userToUpdate.setName(user.getName());
         }
-        if(user.getEmail() != null) {
-            if(isEmailExists(user)) {
+        if (user.getEmail() != null) {
+            if (isEmailExists(user)) {
                 throw new ValidationException("Email уже существует.");
             }
             userToUpdate.setEmail(user.getEmail());

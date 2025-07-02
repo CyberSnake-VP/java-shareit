@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 @Slf4j
@@ -25,7 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         log.info("Save user: {}", user);
-        if(user.getId() == null) {
+        if (user.getId() == null) {
             user.setId(++idGenerator);
         }
         users.put(user.getId(), user);
@@ -33,9 +30,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findById(Long id) {
+    public Optional<User> findById(Long id) {
         log.info("Find user by id: {}", id);
-        return users.get(id);
+        return Optional.ofNullable(users.get(id));
     }
 
     @Override
