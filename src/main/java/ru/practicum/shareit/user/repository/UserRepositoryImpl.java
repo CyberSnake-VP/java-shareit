@@ -22,10 +22,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        log.info("Save user: {}", user);
         if (user.getId() == null) {
             user.setId(++idGenerator);
         }
+        log.info("Save user: {}", user);
         users.put(user.getId(), user);
         return user;
     }

@@ -31,10 +31,10 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item save(Item item) {
-        log.info("Save item {}", item);
         if (item.getId() == null) {
             item.setId(++generateId);
         }
+        log.info("Save item {}", item);
         if (items.containsKey(item.getOwner())) {
             items.get(item.getOwner()).add(item);
         } else {
