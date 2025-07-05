@@ -8,7 +8,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 import java.util.List;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

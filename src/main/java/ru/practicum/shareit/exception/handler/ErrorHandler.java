@@ -1,5 +1,6 @@
 package ru.practicum.shareit.exception.handler;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,11 +30,22 @@ public class ErrorHandler {
         return ErrorResponse.builder().error(e.getMessage()).build();
     }
 
+    // Spring на уровне контроллеров @Valid выбрасывает MethodArgumentNotValidException
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResponse handleArgumentNotValid(final MethodArgumentNotValidException e) {
+        log.info("MethodArgumentNotValidException: {}", e.getMessage());
         log.warn(Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
         return ErrorResponse.builder().error(e.getFieldError().getDefaultMessage()).build();
+    }
+
+    // В случаях где нет @Valid Hibernate вызовет исключение на уровне JPA и сгенерирует ConstraintViolationException.
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResponse handleConstraintViolation(final ConstraintViolationException e) {
+        log.info("Constraint violation: {}", e.getMessage());
+        log.warn(e.getMessage());
+        return ErrorResponse.builder().error(e.getMessage()).build();
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
