@@ -1,20 +1,18 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.user.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ItemDto {
+public class UserDto {
     @Positive(message = "Поле id должно быть положительным числом.")
     private Long id;
-    @NotBlank
     private String name;
-    @NotBlank
-    private String description;
-    @NotNull(message = "Поле available не может быть пустым.")
-    private Boolean available;
+    @NotBlank(message = "Поле email должно быть заполнено.")
+    @Email(message = "Email не заполнен или не корректен.")
+    private String email;
 }
