@@ -1,27 +1,49 @@
 package ru.practicum.shareit.booking;
 
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.User;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
+@Entity
+@Table(name = "bookings")
+@Getter @Setter @ToString
 public class Booking {
-/**id — уникальный идентификатор бронирования;
- start — дата и время начала бронирования;
- end — дата и время конца бронирования;
- item — вещь, которую пользователь бронирует;
- booker — пользователь, который осуществляет бронирование;
- status — статус бронирования. Может принимать одно из следующих значений:
- WAITING — новое бронирование, ожидает одобрения, APPROVED — бронирование
- подтверждено владельцем, REJECTED — бронирование отклонено владельцем,
- CANCELED — бронирование отменено создателем.**/
-
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
-private Instant start;
-private Instant end;
-private Item item;
-private User booker;
-private Status status;
 
+@Column(name = "start_date")
+private LocalDateTime start;
+
+@Column(name = "end_date")
+private LocalDateTime end;
+
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "item_id")
+private Item item;
+
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "booker_id")
+private User booker;
+
+@Enumerated(EnumType.STRING)
+private BookingStatus status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Booking booking)) return false;
+        return Objects.equals(id, booking.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
