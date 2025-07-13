@@ -14,7 +14,6 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,6 +35,7 @@ public class BookingServiceImpl implements BookingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
+        // Map'им объект booking, получаем item и user и записываем в поля booking
         Booking booking = BookingMapper.mapToBooking(bookingDto, item, user);
         booking.setStatus(BookingStatus.WAITING);
         return BookingMapper.mapToBookingDto(bookingRepository.save(booking));
@@ -75,11 +75,19 @@ public class BookingServiceImpl implements BookingService {
         LocalDateTime currentDate = LocalDateTime.now();
         switch (state) {
             case ALL -> bookings = bookingRepository.findAllByBooker_IdOrderByStartDesc(bookerId);
-            case CURRENT -> bookings =bookingRepository.findAllByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(bookerId, currentDate, currentDate);
+            case CURRENT ->
+                    bookings = bookingRepository.findAllByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(bookerId, currentDate, currentDate);
+            case PAST ->
+                    bookings = bookingRepository.findAllByBooker_IdAndEndBeforeOrderByStartDesc(bookerId, currentDate);
+            case FUTURE ->
+                    bookings = bookingRepository.findAllByBooker_IdAndStartAfterOrderByStartDesc(bookerId, currentDate);
+            case WAITING ->
+                    bookings = bookingRepository.findAllByBooker_IdAndStatusOrderByStartDesc(bookerId, BookingStatus.WAITING);
+            case REJECTED ->
+                    bookings = bookingRepository.findAllByBooker_IdAndStatusOrderByStartDesc(bookerId, BookingStatus.REJECTED);
             default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "The booking state is incorrect.: " + state);
         }
-
 
         return bookings.stream().map(BookingMapper::mapToBookingDto).toList();
     }

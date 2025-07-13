@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +21,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     // Время старта бронирования раньше, чем текущее время и заканчивается дольше, чем текущее.
     List<Booking> findAllByBooker_IdAndStartBeforeAndEndAfterOrderByStartDesc(Long bookerId, LocalDateTime currentDate, LocalDateTime currentDate1);
+    // Время окончания бронирования раньше текущего времени.
+    List<Booking> findAllByBooker_IdAndEndBeforeOrderByStartDesc(Long bookerId, LocalDateTime currentDate);
+    // Время начала бронирования позже текущего времени.
+    List<Booking> findAllByBooker_IdAndStartAfterOrderByStartDesc(Long bookerId, LocalDateTime currentDate);
+    // Проверяем статус бронирования
+    List<Booking> findAllByBooker_IdAndStatusOrderByStartDesc(Long bookerId, BookingStatus bookingStatus);
 }
