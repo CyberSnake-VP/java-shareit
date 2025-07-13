@@ -22,20 +22,19 @@ public class ItemController {
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto add(@RequestHeader("X-Sharer-User-Id") @Positive Long userId,
                        @RequestBody @Valid ItemDto item) {
-        return itemService.addNewItem(userId, item);
+        return itemService.add(userId, item);
     }
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto get(@RequestHeader("X-Sharer-User-Id") @Positive Long userId,
-                       @PathVariable("itemId") @Positive Long itemId) {
-        return itemService.getItem(userId, itemId);
+    public ItemDto get(@PathVariable("itemId") @Positive Long itemId) {
+        return itemService.getById(itemId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> getAllByUser(@RequestHeader("X-Sharer-User-Id") @Positive Long userId) {
-        return itemService.getItems(userId);
+        return itemService.getByUserId(userId);
     }
 
     @PatchMapping("/{itemId}")
@@ -43,14 +42,13 @@ public class ItemController {
     public ItemDto update(@RequestHeader("X-Sharer-User-Id") @Positive Long userId,
                           @PathVariable("itemId") @Positive Long itemId,
                           @RequestBody ItemDto item) {
-        return itemService.updateItem(itemId, item, userId);
+        return itemService.update(itemId, item, userId);
     }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> search(@RequestHeader("X-Sharer-User-Id") @Positive Long userId,
-                                @RequestParam("text") String text) {
-        return itemService.searchItem(userId, text);
+    public List<ItemDto> search(@RequestParam("text") String text) {
+        return itemService.search(text);
     }
 
 }
