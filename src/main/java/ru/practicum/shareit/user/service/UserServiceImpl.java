@@ -38,9 +38,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto saveUser(UserDto user) {
         log.info("Save user: {}", user);
-        if (isEmailExists(user)) {
-            throw new ValidationException("Данный email уже используется.");
-        }
         User userToSave = UserMapper.toUser(user);
         return UserMapper.toUserDto(userRepository.save(userToSave));
     }
@@ -48,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         log.info("Delete user by id: {}", id);
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -56,9 +53,6 @@ public class UserServiceImpl implements UserService {
         log.info("Update user: {}", user);
         User userToUpdate = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
-        if (userToUpdate == null) {
-            throw new ValidationException("Пользователя c id " + userId + "не существует.");
-        }
         if (user.getName() != null) {
             userToUpdate.setName(user.getName());
         }
@@ -73,8 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public boolean isEmailExists(UserDto user) {
-        return userRepository.findAll()
-                .stream()
-                .anyMatch(u -> u.getEmail().equals(user.getEmail()));
+        User userWithEmail = userRepository.findByEmail(user.getEmail());
+        return userWithEmail != null;
     }
 }
