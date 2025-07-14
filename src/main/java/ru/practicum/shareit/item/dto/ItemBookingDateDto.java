@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,6 +15,7 @@ public class ItemBookingDateDto {
     private String name;
     private String description;
     private Boolean available;
-    LocalDateTime startBookingDate;
-    LocalDateTime endBookingDate;
+    private LocalDateTime lastBooking;
+    private LocalDateTime nextBooking;
+    private List<CommentDto> comments;
 }

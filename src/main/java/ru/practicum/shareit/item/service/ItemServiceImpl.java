@@ -39,23 +39,26 @@ public class ItemServiceImpl implements ItemService {
      * полей startDate и endDate. Использовал мапу, чтобы получить id item'а в качестве ключа.
      */
     @Override
-    public List<ItemBookingDateDto> getByUserId(Long userId) {
+    public List<ItemBookingDateDto> getAllByUser(Long userId) {
         log.info("Get items from user {}", userId);
 
         Map<Long, Item> items = itemRepository.findByOwner_Id(userId).stream()
                 .collect(Collectors.toMap(Item::getId, Function.identity()));
         Map<Long, Booking> bookings = bookingRepository.findAllByItem_Owner_IdOrderByStartDesc(userId).stream()
                 .collect(Collectors.toMap(booking -> booking.getItem().getId(), Function.identity()));
-        ;
-        return ItemMapper.mapToItemBookingDateDto(bookings, items);
+
+        List<Comment> comments = commentRepository.findAllByAuthor_Id(userId);
+        return ItemMapper.mapToItemBookingDateDto(bookings, items, comments);
     }
 
     @Override
-    public ItemDto getById(Long itemId) {
+    public ItemBookingDateDto getById(Long itemId) {
         log.info("Get item from item {}", itemId);
-        return itemRepository.findById(itemId)
-                .map(ItemMapper::toItemDto)
-                .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найден."));
+        List<Comment> comments = commentRepository.findAllByItem_Id(itemId);
+        return itemRepository.findById(itemId).stream()
+                .map(item -> ItemMapper.mapToItemBookingDateDto(item, comments))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Item not found"));
     }
 
     @Override
@@ -104,6 +107,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public CommentDto addComment(Long userId, Long itemId, CommentDto commentDto) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("item not found"));
@@ -115,7 +119,7 @@ public class ItemServiceImpl implements ItemService {
         Boolean isBooking = bookingRepository.existsByItem_IdAndBooker_IdAndStatusAndStartBefore(
                 itemId, userId, BookingStatus.APPROVED, LocalDateTime.now()
         );
-        if(!isBooking) {
+        if (!isBooking) {
             throw new IllegalArgumentException("booking doesn't not exist");
         }
 

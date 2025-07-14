@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
+
 import java.util.List;
 
 
@@ -27,14 +28,14 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto get(@PathVariable("itemId") @Positive Long itemId) {
+    public ItemBookingDateDto get(@PathVariable("itemId") @Positive Long itemId) {
         return itemService.getById(itemId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ItemBookingDateDto> getAllByUser(@RequestHeader("X-Sharer-User-Id") @Positive Long userId) {
-        return itemService.getByUserId(userId);
+        return itemService.getAllByUser(userId);
     }
 
     @PatchMapping("/{itemId}")

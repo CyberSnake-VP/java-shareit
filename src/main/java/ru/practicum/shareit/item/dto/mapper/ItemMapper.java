@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.dto.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.item.Comment;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.dto.ItemBookingDateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -30,19 +31,19 @@ public class ItemMapper {
      * Решил использовать мапу. Отправил два запроса, обработал ответ в мапу, где ключ - id item, значение объект бронирования
      * По ТЗ необходимо выводить список item'oв, у установленными датами бронирования.
      */
-    public static List<ItemBookingDateDto> mapToItemBookingDateDto(Map<Long, Booking> bookings, Map<Long, Item> items) {
+    public static List<ItemBookingDateDto> mapToItemBookingDateDto(Map<Long, Booking> bookings, Map<Long, Item> items, List<Comment> comments) {
         List<ItemBookingDateDto> result = new ArrayList<>();
         items.forEach((id, item) -> {
-            result.add(ItemMapper.mapToItemBookingDateDto(item));
+            result.add(ItemMapper.mapToItemBookingDateDto(item, comments));
         });
 
         Set<Long> bookingIds = bookings.keySet();
         Set<Long> itemIds = items.keySet();
         for (Long bookingId : bookingIds) {
             if (itemIds.contains(bookingId)) {
-                ItemBookingDateDto ib = ItemMapper.mapToItemBookingDateDto(items.get(bookingId));
-                ib.setStartBookingDate(bookings.get(bookingId).getStart());
-                ib.setEndBookingDate(bookings.get(bookingId).getEnd());
+                ItemBookingDateDto ib = ItemMapper.mapToItemBookingDateDto(items.get(bookingId), comments);
+                ib.setLastBooking(bookings.get(bookingId).getStart());
+                ib.setNextBooking(bookings.get(bookingId).getEnd());
                 result.add(ib);
             }
         }
@@ -50,14 +51,15 @@ public class ItemMapper {
         return result;
     }
 
-    public static ItemBookingDateDto mapToItemBookingDateDto(Item item) {
+    public static ItemBookingDateDto mapToItemBookingDateDto(Item item, List<Comment> comments) {
         return new ItemBookingDateDto(
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
                 null,
-                null
+                null,
+                CommentMapper.mapToCommentDto(comments)
         );
     }
 

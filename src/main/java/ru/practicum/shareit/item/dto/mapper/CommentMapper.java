@@ -6,9 +6,10 @@ import ru.practicum.shareit.item.Comment;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.dto.mapper.UserMapper;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentMapper {
@@ -20,6 +21,7 @@ public class CommentMapper {
                 comment.getCreated()
         );
     }
+
     public static Comment mapToComment(CommentDto commentDto, User user, Item item) {
         Comment comment = new Comment();
         comment.setText(commentDto.getText());
@@ -27,5 +29,13 @@ public class CommentMapper {
         comment.setAuthor(user);
         comment.setCreated(LocalDateTime.now());
         return comment;
+    }
+
+    public static List<CommentDto> mapToCommentDto(List<Comment> comment) {
+        List<CommentDto> commentDtos = new ArrayList<>();
+        for (Comment commentDto : comment) {
+            commentDtos.add(mapToCommentDto(commentDto));
+        }
+        return commentDtos;
     }
 }
