@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.dto.ItemBookingDateDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.dto.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
@@ -29,8 +31,10 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
 
-    /**В этом методе получаем объект бронирования, после чего маппим его в нужный нам объект dto получая значение
-     * полей startDate и endDate. Использовал мапу, чтобы получить id item'а в качестве ключа.*/
+    /**
+     * В этом методе получаем объект бронирования, после чего маппим его в нужный нам объект dto получая значение
+     * полей startDate и endDate. Использовал мапу, чтобы получить id item'а в качестве ключа.
+     */
     @Override
     public List<ItemBookingDateDto> getByUserId(Long userId) {
         log.info("Get items from user {}", userId);
@@ -38,7 +42,8 @@ public class ItemServiceImpl implements ItemService {
         Map<Long, Item> items = itemRepository.findByOwner_Id(userId).stream()
                 .collect(Collectors.toMap(Item::getId, Function.identity()));
         Map<Long, Booking> bookings = bookingRepository.findAllByItem_Owner_IdOrderByStartDesc(userId).stream()
-                .collect(Collectors.toMap(booking -> booking.getItem().getId(), Function.identity()));;
+                .collect(Collectors.toMap(booking -> booking.getItem().getId(), Function.identity()));
+        ;
         return ItemMapper.mapToItemBookingDateDto(bookings, items);
     }
 

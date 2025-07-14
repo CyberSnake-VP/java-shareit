@@ -27,6 +27,8 @@ public class ItemMapper {
 
     /**
      * Получаем объект dto с установленными датами начала и конца бронирования
+     * Решил использовать мапу. Отправил два запроса, обработал ответ в мапу, где ключ - id item, значение объект бронирования
+     * По ТЗ необходимо выводить список item'oв, у установленными датами бронирования.
      */
     public static List<ItemBookingDateDto> mapToItemBookingDateDto(Map<Long, Booking> bookings, Map<Long, Item> items) {
         List<ItemBookingDateDto> result = new ArrayList<>();
