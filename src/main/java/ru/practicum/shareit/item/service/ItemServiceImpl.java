@@ -36,7 +36,7 @@ public class ItemServiceImpl implements ItemService {
 
     /**
      * В этом методе получаем объект бронирования, после чего маппим его в нужный нам объект dto получая значение
-     * полей startDate и endDate. Использовал мапу, чтобы получить id item'а в качестве ключа.
+     * полей startDate и endDate. Использовал map, чтобы получить id item'а в качестве ключа.
      */
     @Override
     public List<ItemBookingDateDto> getAllByUser(Long userId) {
