@@ -114,8 +114,8 @@ public class ItemServiceImpl implements ItemService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("user not found"));
 
-        /** Через запросный метод получаем булевое значение имеется ли вещь и пользователь осуществивший ее бронь
-         * а также заодно проверяем была ли одобрена бронь, а так же время бронирования не должно быть в будущем. **/
+        /** Через запросный метод получаем  булевое значение имеется ли вещь и пользователь осуществивший ее бронь
+         * а также заодно проверяем была ли одобрена бронь, а так же время бронирования не должно быть в будущем.**/
         Boolean isBooking = bookingRepository.existsByItem_IdAndBooker_IdAndStatusAndStartBefore(
                 itemId, userId, BookingStatus.APPROVED, LocalDateTime.now()
         );
