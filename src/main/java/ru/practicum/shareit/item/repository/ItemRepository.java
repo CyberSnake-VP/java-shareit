@@ -1,12 +1,10 @@
 package ru.practicum.shareit.item.repository;
 
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.item.Item;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByOwner_Id(Long ownerId);
@@ -16,5 +14,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             " or upper(i.description) like upper(concat('%', ?1, '%')) and i.available=true")
     List<Item> search(String text);
 
-     Optional<Item> findByIdAndAvailableIsTrue(Long itemId);
+    Item findByIdAndAvailableIsTrue(Long itemId);
 }

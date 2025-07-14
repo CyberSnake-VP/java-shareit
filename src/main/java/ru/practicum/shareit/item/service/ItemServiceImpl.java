@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.dto.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
@@ -22,14 +25,17 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final BookingRepository bookingRepository;
 
+    /**В этом методе получаем объект бронирования, после чего маппим его в нужный нам объект dto получая значение
+     * полей startDate и endDate*/
     @Override
-    public List<ItemDto> getByUserId(Long userId) {
+    public List<ItemBookingDateDto> getByUserId(Long userId) {
         log.info("Get items from user {}", userId);
-        // избегаем N+1 запросов через запросный метод.
-        return itemRepository.findByOwner_Id(userId).stream()
-                .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
+        List<Item> items = itemRepository.findByOwner_Id(userId);
+        List<Booking> bookings = bookingRepository.findAllByBooker_IdOrderByStartDesc(userId);
+
+        return null;
     }
 
     @Override
@@ -42,7 +48,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto add(Long userId, ItemDto item) {
+    public ItemDto add(Long userId, ItemRequestDto item) {
         log.info("Add new item from user {}", userId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
@@ -53,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemDto update(Long itemId, ItemDto item, Long userId) {
+    public ItemDto update(Long itemId, ItemUpdateDto item, Long userId) {
         log.info("Update item from user {}", userId);
         // ищем пользователя по id, проверяем существует ли он ?
         userRepository.findById(userId)

@@ -6,7 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.ItemBookingDateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.service.ItemService;
 import java.util.List;
 
@@ -21,7 +24,7 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto add(@RequestHeader("X-Sharer-User-Id") @Positive Long userId,
-                       @RequestBody @Valid ItemDto item) {
+                       @RequestBody @Valid ItemRequestDto item) {
         return itemService.add(userId, item);
     }
 
@@ -33,7 +36,7 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> getAllByUser(@RequestHeader("X-Sharer-User-Id") @Positive Long userId) {
+    public List<ItemBookingDateDto> getAllByUser(@RequestHeader("X-Sharer-User-Id") @Positive Long userId) {
         return itemService.getByUserId(userId);
     }
 
@@ -41,7 +44,7 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public ItemDto update(@RequestHeader("X-Sharer-User-Id") @Positive Long userId,
                           @PathVariable("itemId") @Positive Long itemId,
-                          @RequestBody ItemDto item) {
+                          @Valid @RequestBody ItemUpdateDto item) {
         return itemService.update(itemId, item, userId);
     }
 
