@@ -16,6 +16,8 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,14 +30,16 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
 
     /**В этом методе получаем объект бронирования, после чего маппим его в нужный нам объект dto получая значение
-     * полей startDate и endDate*/
+     * полей startDate и endDate. Использовал мапу, чтобы получить id item'а в качестве ключа.*/
     @Override
     public List<ItemBookingDateDto> getByUserId(Long userId) {
         log.info("Get items from user {}", userId);
-        List<Item> items = itemRepository.findByOwner_Id(userId);
-        List<Booking> bookings = bookingRepository.findAllByBooker_IdOrderByStartDesc(userId);
 
-        return null;
+        Map<Long, Item> items = itemRepository.findByOwner_Id(userId).stream()
+                .collect(Collectors.toMap(Item::getId, Function.identity()));
+        Map<Long, Booking> bookings = bookingRepository.findAllByItem_Owner_IdOrderByStartDesc(userId).stream()
+                .collect(Collectors.toMap(booking -> booking.getItem().getId(), Function.identity()));;
+        return ItemMapper.mapToItemBookingDateDto(bookings, items);
     }
 
     @Override
