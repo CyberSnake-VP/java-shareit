@@ -1,47 +1,40 @@
-package ru.practicum.shareit.booking;
-
+package ru.practicum.shareit.item;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "bookings")
+@Table(name = "comments")
 @Getter
 @Setter
 @ToString
-public class Booking {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "start_date")
-    private LocalDateTime start;
-
-    @Column(name = "end_date")
-    private LocalDateTime end;
+    private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booker_id")
-    private User booker;
+    @JoinColumn(name = "author_id")
+    private User author;
 
-    @Enumerated(EnumType.STRING)
-    private BookingStatus status;
+    private LocalDateTime created;
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Booking booking)) return false;
-        return Objects.equals(id, booking.id);
+        if (!(o instanceof Comment comment)) return false;
+        return Objects.equals(id, comment.id);
     }
 
     @Override
