@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "bookings")
+@Table(name = "bookings", schema = "public")
 @Getter
 @Setter
 @ToString
@@ -37,15 +37,4 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Booking booking)) return false;
-        return Objects.equals(id, booking.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
 }

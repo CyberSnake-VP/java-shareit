@@ -8,7 +8,7 @@ import lombok.ToString;
 import ru.practicum.shareit.user.User;
 
 @Entity
-@Table(name = "items")
+@Table(name = "items", schema = "public")
 @Getter
 @Setter
 @ToString

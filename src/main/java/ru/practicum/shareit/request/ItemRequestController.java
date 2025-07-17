@@ -29,6 +29,11 @@ public class ItemRequestController {
         return null;
     }
 
+    @GetMapping("/{requestId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ItemRequestDto getItemRequest(@PathVariable("requestId") final String requestId) {
+        return null;
+    }
 
 
 }
