@@ -38,3 +38,10 @@ CREATE TABLE IF NOT EXISTS comments (
     CONSTRAINT fk_comments_to_items FOREIGN KEY (item_id) REFERENCES items(id),
     CONSTRAINT fk_comments_to_users FOREIGN KEY (author_id) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS requests (
+    id BIGINT GENERATED ALWAYS AS IDENTITY,
+    description varchar(1000),
+    requestor_id BIGINT,
+    CONSTRAINT pk_requests PRIMARY KEY (id)
+)

@@ -1,7 +1,9 @@
 package ru.practicum.shareit.request;
 
-/**
- * TODO Sprint add-item-requests.
- */
+
+import jakarta.persistence.Entity;
+
+@Entity
 public class ItemRequest {
+
 }

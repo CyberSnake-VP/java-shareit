@@ -1,12 +1,34 @@
 package ru.practicum.shareit.request;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 
-/**
- * TODO Sprint add-item-requests.
- */
+import java.util.List;
+
+
 @RestController
 @RequestMapping(path = "/requests")
 public class ItemRequestController {
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ItemRequestDto createItemRequest(@RequestBody final ItemRequest itemRequestDto) {
+        return null;
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ItemRequestDto> getItemRequests() {
+        return null;
+    }
+
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ItemRequestDto> getAllItemRequests() {
+        return null;
+    }
+
+
+
 }
