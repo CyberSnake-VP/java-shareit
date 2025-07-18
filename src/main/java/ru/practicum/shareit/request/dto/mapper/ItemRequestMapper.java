@@ -6,6 +6,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.request.dto.ItemRequestEntryDto;
 import ru.practicum.shareit.request.dto.ItemRequestExitDto;
+import ru.practicum.shareit.request.dto.ItemRequestExitNoItemListDto;
 
 import java.util.List;
 
@@ -19,13 +20,21 @@ public class ItemRequestMapper {
         return itemRequest;
     }
 
-    public static ItemRequestExitDto mapToItemRequestExitDto(final ItemRequest request, List<ItemDto> items) {
-        return new ItemRequestExitDto(
-                request.getId(),
-                request.getDescription(),
-                request.getRequestor(),
-                request.getCreated(),
-                items
-        );
+    public static ItemRequestExitDto mapToItemRequestExitDto(final ItemRequest request) {
+        ItemRequestExitDto itemRequestExitDto = new ItemRequestExitDto();
+        itemRequestExitDto.setId(request.getId());
+        itemRequestExitDto.setDescription(request.getDescription());
+        itemRequestExitDto.setRequestor(request.getRequestor());
+        itemRequestExitDto.setCreated(request.getCreated());
+        return itemRequestExitDto;
+    }
+
+    public static ItemRequestExitNoItemListDto mapToItemRequestExitNoItemListDto(final ItemRequest request) {
+        ItemRequestExitNoItemListDto itemRequestExitNoItemListDto = new ItemRequestExitNoItemListDto();
+        itemRequestExitNoItemListDto.setId(request.getId());
+        itemRequestExitNoItemListDto.setDescription(request.getDescription());
+        itemRequestExitNoItemListDto.setRequestor(request.getRequestor());
+        itemRequestExitNoItemListDto.setCreated(request.getCreated());
+        return itemRequestExitNoItemListDto;
     }
 }

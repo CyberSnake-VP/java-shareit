@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS items (
     description varchar(1000) NOT NULL,
     available boolean NOT NULL,
     owner_id BIGINT,
+    request_id BIGINT,
     CONSTRAINT pk_item PRIMARY KEY (id),
     CONSTRAINT fk_items_to_users FOREIGN KEY (owner_id) REFERENCES users(id)
 );
@@ -43,5 +44,6 @@ CREATE TABLE IF NOT EXISTS requests (
     id BIGINT GENERATED ALWAYS AS IDENTITY,
     description varchar(1000),
     requestor_id BIGINT,
+    created timestamp without time zone,
     CONSTRAINT pk_requests PRIMARY KEY (id)
 )
