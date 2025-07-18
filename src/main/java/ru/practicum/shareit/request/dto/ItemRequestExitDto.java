@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ItemRequestResponseDto {
+@NoArgsConstructor
+public class ItemRequestExitDto {
     private Long id;
     private String description;
     private Long requestor;

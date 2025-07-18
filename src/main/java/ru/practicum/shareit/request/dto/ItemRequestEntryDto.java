@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ItemRequestDto {
-    private String description;
+@AllArgsConstructor
+public class ItemRequestEntryDto {
+   private String description;
 }
