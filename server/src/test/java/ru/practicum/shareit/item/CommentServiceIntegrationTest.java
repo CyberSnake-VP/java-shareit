@@ -66,7 +66,7 @@ class CommentServiceIntegrationTest {
         //обновляем статус
         bookingService.updateStatus(owner.getId(), bookingDto.getId(), true);
 
-        commentDto = new CommentDto(null, "cometntext", "autorname", LocalDateTime.now());
+        commentDto = new CommentDto(0L, "cometntext", "autorname", LocalDateTime.now());
 
     }
 
