@@ -63,7 +63,7 @@ class CommentServiceIntegrationTest {
 
         bookingDto = bookingService.create(bookingRequestDto, booker.getId());
 
-
+        //обновляем статус
         bookingService.updateStatus(owner.getId(), bookingDto.getId(), true);
 
 
