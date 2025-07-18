@@ -8,6 +8,8 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @Transactional(readOnly = true)
@@ -23,7 +25,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
      }
 
      @Override
-     public ItemRequestResponseDto getAll(Long userId) {
+     public List<ItemRequestResponseDto> getAll(Long userId) {
           return null;
      }
 
@@ -33,7 +35,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
      }
 
      @Override
-     public ItemRequestResponseDto getByUser(Long userId) {
+     public List<ItemRequestResponseDto> getByUser(Long userId) {
           return null;
      }
 }
